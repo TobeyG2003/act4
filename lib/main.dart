@@ -56,7 +56,7 @@ class ShapesDemoScreen extends StatelessWidget {
             SizedBox(
               height: 300,
               child: CustomPaint(
-                painter: CombinedShapesPainter(),
+                painter: SmileyPainter(),
                 size: const Size(double.infinity, 300),
               ),
             ),
@@ -153,7 +153,7 @@ class BasicShapesPainter extends CustomPainter {
   }
 }
 
-class CombinedShapesPainter extends CustomPainter {
+class SmileyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final centerX = size.width / 2;
@@ -163,44 +163,36 @@ class CombinedShapesPainter extends CustomPainter {
     final backgroundGradient = RadialGradient(
       center: Alignment.center,
       radius: 0.8,
-      colors: [Colors.blue.shade100, Colors.white],
+      colors: [Colors.yellow, Colors.orange],
     );
-    canvas.drawRect(
-      Rect.fromLTWH(0, 0, size.width, size.height),
-      Paint()..shader = backgroundGradient.createShader(Rect.fromLTWH(0, 0, size.width, size.height)),
-    );
-
-    // Draw a sun (circle with rays)
-    final sunPaint = Paint()
+    final facePaint = Paint()
       ..color = Colors.yellow
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(Offset(centerX, centerY - 40), 40, sunPaint);
-
-    // Sun rays (lines)
-    final rayPaint = Paint()
-      ..color = Colors.yellow
-      ..strokeWidth = 3;
-    for (int i = 0; i < 8; i++) {
-      final angle = i * (pi / 4); // Use pi from dart:math
-      final dx = cos(angle) * 60;
-      final dy = sin(angle) * 60;
-      canvas.drawLine(
-        Offset(centerX, centerY - 40),
-        Offset(centerX + dx, centerY - 40 + dy),
-        rayPaint,
-      );
-    }
-
-    // Draw a house (square with triangle roof)
-    final housePaint = Paint()
-      ..color = Colors.brown
-      ..style = PaintingStyle.fill;
-    canvas.drawRect(
-      Rect.fromCenter(center: Offset(centerX, centerY + 40), width: 80, height: 80),
-      housePaint,
+    canvas.drawCircle(
+      Offset(centerX, centerY),
+      150,
+      facePaint
     );
 
-    final roofPaint = Paint()
+    final eyePaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(Offset (centerX - 50, centerY - 30), 15, eyePaint);
+    canvas.drawCircle(Offset (centerX + 50, centerY - 30), 15, eyePaint);
+    final mouthPaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 5;
+    canvas.drawArc(
+
+      Rect.fromCenter(center: Offset(centerX, centerY + 20), width: 100, height: 60),
+      0,
+      pi/2,
+      false,
+      mouthPaint,
+    );
+    
+    /*final roofPaint = Paint()
       ..color = Colors.red
       ..style = PaintingStyle.fill;
     final roofPath = Path()
@@ -209,28 +201,7 @@ class CombinedShapesPainter extends CustomPainter {
       ..lineTo(centerX, centerY - 60)
       ..close();
     canvas.drawPath(roofPath, roofPaint);
-
-    // Draw a door (rectangle)
-    final doorPaint = Paint()
-      ..color = Colors.blueGrey
-      ..style = PaintingStyle.fill;
-    canvas.drawRect(
-      Rect.fromCenter(center: Offset(centerX, centerY + 60), width: 30, height: 50),
-      doorPaint,
-    );
-
-    // Draw windows (squares)
-    final windowPaint = Paint()
-      ..color = Colors.blue.shade200
-      ..style = PaintingStyle.fill;
-    canvas.drawRect(
-      Rect.fromCenter(center: Offset(centerX - 25, centerY + 20), width: 20, height: 20),
-      windowPaint,
-    );
-    canvas.drawRect(
-      Rect.fromCenter(center: Offset(centerX + 25, centerY + 20), width: 20, height: 20),
-      windowPaint,
-    );
+    */
   }
 
   @override
