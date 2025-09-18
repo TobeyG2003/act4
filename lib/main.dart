@@ -26,13 +26,15 @@ class ShapesDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Shapes Drawing Demo'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Shapes Drawing Demo'),
+        ),
+        body: SingleChildScrollView(
+padding: const EdgeInsets.all(16.0),
+child:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
@@ -49,7 +51,7 @@ class ShapesDemoScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Task 2: Combined Shapes (Abstract Design)',
+              'Task 2: Emojis',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
@@ -62,20 +64,35 @@ class ShapesDemoScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Task 3: Styled Shapes',
+              'Task 3: Interactive Emoji Drawing',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 300,
-              child: CustomPaint(
-                painter: StyledShapesPainter(),
-                size: const Size(double.infinity, 300),
+            const SizedBox(
+              height: 50,
+              child: TabBar(
+                tabs: [ Tab(text: 'Smiley'),
+                Tab(text: 'Heart'),
+                Tab(text: 'Party'),
+                Tab(text: 'to do'),
+              ],
+            ),
+            ),
+            const SizedBox(height: 200,
+            child: Expanded(
+              child: TabBarView(
+                children: [
+                  Center(child: Text('Home Content')),
+                  Center(child: Text('Settings Content')),
+                  Center(child: Text('Profile Content')),
+                  Center(child: Text('Profile Content')),
+                ],
               ),
+            )
             ),
           ],
         ),
       ),
+    )
     );
   }
 }
@@ -165,6 +182,7 @@ class SmileyPainter extends CustomPainter {
       radius: 0.8,
       colors: [Colors.yellow, Colors.orange],
     );
+    // Background gradient
     final facePaint = Paint()
       ..color = Colors.yellow
       ..style = PaintingStyle.fill;
