@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-
+// Tobey Gray
+// Harshith Boopathy
 void main() {
   runApp(const ShapesDemoApp());
 }
@@ -77,14 +78,19 @@ child:Column(
               ],
             ),
             ),
-            const SizedBox(height: 200,
+            SizedBox(height: 500,
             child: Expanded(
               child: TabBarView(
                 children: [
-                  Center(child: Text('Home Content')),
-                  Center(child: Text('Settings Content')),
-                  Center(child: Text('Profile Content')),
-                  Center(child: Text('Profile Content')),
+                  Center(
+              child: CustomPaint(
+                painter: SmileyPainter(),
+                size: const Size(double.infinity, 300),
+              ),
+            ),
+                  Center(child: Text('')),
+                  Center(child: Text('')),
+                  Center(child: Text('')),
                 ],
               ),
             )
