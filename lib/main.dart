@@ -72,9 +72,9 @@ child:Column(
               height: 50,
               child: TabBar(
                 tabs: [ Tab(text: 'Smiley'),
-                Tab(text: 'Heart'),
+                Tab(text: 'Skull'),
                 Tab(text: 'Party'),
-                Tab(text: 'to do'),
+                Tab(text: 'Heart'),
               ],
             ),
             ),
@@ -88,7 +88,12 @@ child:Column(
                 size: const Size(double.infinity, 300),
               ),
             ),
-                  Center(child: Text('')),
+                  Center(
+              child: CustomPaint(
+                painter: SkullPainter(),
+                size: const Size(double.infinity, 300),
+              ),
+            ),
                   Center(child: Text('')),
                   Center(child: Text('')),
                 ],
@@ -182,13 +187,6 @@ class SmileyPainter extends CustomPainter {
     final centerX = size.width / 2;
     final centerY = size.height / 2;
 
-    // Background gradient
-    final backgroundGradient = RadialGradient(
-      center: Alignment.center,
-      radius: 0.8,
-      colors: [Colors.yellow, Colors.orange],
-    );
-    // Background gradient
     final facePaint = Paint()
       ..color = Colors.yellow
       ..style = PaintingStyle.fill;
@@ -215,17 +213,6 @@ class SmileyPainter extends CustomPainter {
       false,
       mouthPaint,
     );
-    
-    /*final roofPaint = Paint()
-      ..color = Colors.red
-      ..style = PaintingStyle.fill;
-    final roofPath = Path()
-      ..moveTo(centerX - 60, centerY)
-      ..lineTo(centerX + 60, centerY)
-      ..lineTo(centerX, centerY - 60)
-      ..close();
-    canvas.drawPath(roofPath, roofPaint);
-    */
   }
 
   @override
@@ -233,6 +220,86 @@ class SmileyPainter extends CustomPainter {
     return false;
   }
 }
+
+class SkullPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final centerX = size.width / 2;
+    final centerY = size.height / 2;
+
+    // Background gradient
+    final backgroundGradient = RadialGradient(
+      center: Alignment.center,
+      radius: 0.8,
+      colors: [const Color.fromARGB(255, 255, 255, 255), const Color.fromARGB(255, 36, 36, 36)],
+    );
+
+    canvas.drawRect(
+Rect.fromLTWH(0, 0, size.width, size.height),
+Paint()..shader = backgroundGradient.createShader(Rect.fromLTWH(0, 0,
+size.width, size.height)),
+);
+
+    // Background gradient
+    final facePaint = Paint()
+      ..color = const Color.fromARGB(255, 195, 195, 195)
+      ..style = PaintingStyle.fill;
+    final Rect rect = Rect.fromCenter(
+      center: Offset(centerX, centerY-20),
+      width: 300,
+      height: 250,
+    );
+    canvas.drawOval(
+      rect,
+      facePaint
+    );
+
+    final eyePaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(Offset (centerX - 50, centerY - 30), 30, eyePaint);
+    canvas.drawCircle(Offset (centerX + 50, centerY - 30), 30, eyePaint);
+
+    final teethPaint = Paint()
+      ..color = const Color.fromARGB(255, 195, 195, 195)
+      ..style = PaintingStyle.fill;
+    final Rect teethrect1 = Rect.fromCenter(
+      center: Offset(centerX+40, centerY+90),
+      width: 70,
+      height: 100,
+    );
+    final Rect teethrect2 = Rect.fromCenter(
+      center: Offset(centerX-40, centerY+90),
+      width: 70,
+      height: 100,
+    );
+    final Rect teethrect3 = Rect.fromCenter(
+      center: Offset(centerX, centerY+90),
+      width: 70,
+      height: 100,
+    );
+    canvas.drawOval(teethrect1, teethPaint);
+    canvas.drawOval(teethrect2, teethPaint);
+    canvas.drawOval(teethrect3, teethPaint);
+
+    final nosePaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.fill;
+    final path = Path();
+    path.moveTo(size.width / 2, centerY+10);
+    path.lineTo(centerX+25, centerY+40);
+    path.lineTo(centerX-25, centerY+40);
+    path.close();
+
+    canvas.drawPath(path, nosePaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
 
 class StyledShapesPainter extends CustomPainter {
   @override
