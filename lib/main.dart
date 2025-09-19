@@ -94,8 +94,18 @@ child:Column(
                 size: const Size(double.infinity, 300),
               ),
             ),
-                  Center(child: Text('')),
-                  Center(child: Text('')),
+                  Center(
+              child: CustomPaint(
+                painter: PartyHatEmojiPainter(),
+                size: const Size(double.infinity, 300),
+              ),
+            ),
+                  Center(
+              child: CustomPaint(
+                painter: HeartOnlyPainter(),
+                size: const Size(double.infinity, 300),
+              ),
+            ),
                 ],
               ),
             )
@@ -301,88 +311,124 @@ size.width, size.height)),
 }
 
 
-class StyledShapesPainter extends CustomPainter {
+class HeartOnlyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final centerX = size.width / 2;
-    final centerY = size.height / 2;
+    final cx = size.width / 2;
+    final cy = size.height / 2;
 
-    // Draw a gradient-filled rectangle
-    final rectGradient = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [Colors.red, Colors.blue],
-    );
-    final rect = Rect.fromCenter(center: Offset(centerX, centerY - 100), width: 200, height: 60);
-    canvas.drawRect(
-      rect,
-      Paint()
-        ..shader = rectGradient.createShader(rect)
-        ..style = PaintingStyle.fill,
-    );
+    final w = min(size.width, size.height) * 0.60;
+    final h = w;
 
-    // Draw a circle with a border
-    final circlePaint = Paint()
-      ..color = Colors.green
-      ..style = PaintingStyle.fill;
-    final circleBorderPaint = Paint()
-      ..color = Colors.black
+    final bottom = Offset(cx, cy + h * 0.30);
+    final topDip = Offset(cx, cy - h * 0.10);
+
+    final path = Path()
+      ..moveTo(bottom.dx, bottom.dy)
+      ..cubicTo(
+        cx + w * 0.50, cy + h * 0.05,
+        cx + w * 0.50, cy - h * 0.35,
+        topDip.dx, topDip.dy,
+      )
+      ..cubicTo(
+        cx - w * 0.50, cy - h * 0.35,
+        cx - w * 0.50, cy + h * 0.05,
+        bottom.dx, bottom.dy,
+      )
+      ..close();
+
+    final rect = Rect.fromCenter(center: Offset(cx, cy), width: w, height: h);
+    final fill = Paint()
+      ..shader = const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Color(0xFFFF5A7A), Color(0xFFD41445)],
+      ).createShader(rect);
+
+    final stroke = Paint()
+      ..color = const Color(0xFF8E1C2A)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 4;
-    canvas.drawCircle(Offset(centerX - 80, centerY), 40, circlePaint);
-    canvas.drawCircle(Offset(centerX - 80, centerY), 40, circleBorderPaint);
+      ..strokeWidth = max(2.0, w * 0.03)
+      ..strokeJoin = StrokeJoin.round;
 
-    // Draw a transparent oval
-    final ovalPaint = Paint()
-      ..color = Colors.purple.withOpacity(0.5)
-      ..style = PaintingStyle.fill;
-    canvas.drawOval(
-      Rect.fromCenter(center: Offset(centerX + 80, centerY), width: 100, height: 60),
-      ovalPaint,
-    );
-
-    // Draw a dashed line using a custom path effect
-    final dashPaint = Paint()
-      ..color = Colors.orange
-      ..strokeWidth = 3
-      ..style = PaintingStyle.stroke;
-    
-    // We draw a series of short lines and spaces
-    final path = Path();
-    double startX = centerX - 100;
-    const dashLength = 10.0;
-    const spaceLength = 5.0;
-    while (startX < centerX + 100) {
-      path.moveTo(startX, centerY + 80);
-      path.lineTo(min(startX + dashLength, centerX + 100), centerY + 80);
-      startX += dashLength + spaceLength;
-    }
-    canvas.drawPath(path, dashPaint);
-
-    // Draw a gradient arc
-    final arcGradient = SweepGradient(
-      center: Alignment.centerRight,
-      startAngle: 0,
-      endAngle: pi, // Use pi from dart:math
-      colors: [Colors.red, Colors.yellow, Colors.green],
-    );
-    final arcRect = Rect.fromCenter(center: Offset(centerX, centerY + 100), width: 120, height: 120);
-    final arcPaint = Paint()
-      ..shader = arcGradient.createShader(arcRect)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 10
-      ..strokeCap = StrokeCap.round;
-    canvas.drawArc(
-      Rect.fromCenter(center: Offset(centerX, centerY + 100), width: 100, height: 100),
-      0, // start angle
-      2.5, // sweep angle
-      false,
-      arcPaint,
-    );
+    canvas.drawPath(path, fill);
+    canvas.drawPath(path, stroke);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+
+class PartyHatEmojiPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final c = Offset(size.width * 0.5, size.height * 0.58);
+    final r = min(size.width, size.height) * 0.28;
+
+    _drawFace(canvas, c, r);
+    _drawHat(canvas, c, r); 
   }
+
+  void _drawFace(Canvas canvas, Offset c, double r) {
+    canvas.drawCircle(c, r, Paint()..color = const Color(0xFFF7E64A));
+
+    final eyeOffX = r * 0.35;
+    final eyeOffY = r * 0.18;
+    final eyePaint = Paint()..color = Colors.black;
+    canvas.drawCircle(Offset(c.dx - eyeOffX, c.dy - eyeOffY), r * 0.09, eyePaint);
+    canvas.drawCircle(Offset(c.dx + eyeOffX, c.dy - eyeOffY), r * 0.09, eyePaint);
+
+    final mouthRect = Rect.fromCenter(
+      center: Offset(c.dx + r * 0.03, c.dy + r * 0.20),
+      width: r * 1.05,
+      height: r * 0.95,
+    );
+    final smile = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = max(4.0, r * 0.06)
+      ..strokeCap = StrokeCap.round;
+    canvas.drawArc(mouthRect, 0.12 * pi, 0.55 * pi, false, smile);
+  }
+
+  void _drawHat(Canvas canvas, Offset c, double r) {
+  final baseY = c.dy - r - r * 0.02;    
+  final hatWidth = r * 1.20;            
+  final hatHeight = r * 0.95;    
+
+  final hatLeft  = Offset(c.dx - hatWidth / 2, baseY);
+  final hatRight = Offset(c.dx + hatWidth / 2, baseY);
+  final hatTop   = Offset(c.dx, baseY - hatHeight);
+
+  final hatPath = Path()
+    ..moveTo(hatTop.dx, hatTop.dy)
+    ..lineTo(hatLeft.dx, hatLeft.dy)
+    ..lineTo(hatRight.dx, hatRight.dy)
+    ..close();
+
+  canvas.drawPath(hatPath, Paint()..color = const Color(0xFF7C3AED)); 
+
+  final stripePaint = Paint()
+    ..color = const Color(0xFFFFD54F) 
+    ..strokeWidth = r * 0.06
+    ..style = PaintingStyle.stroke;
+
+  double lerp(double a, double b, double t) => a + (b - a) * t;
+
+  for (int i = -2; i <= 2; i++) {
+    final t = i / 2.5;
+    final p1 = Offset(lerp(hatLeft.dx, hatTop.dx, (t + 1) / 2),
+                      lerp(hatLeft.dy, hatTop.dy, (t + 1) / 2));
+    final p2 = Offset(lerp(hatRight.dx, hatTop.dx, (1 - t) / 2),
+                      lerp(hatRight.dy, hatTop.dy, (1 - t) / 2));
+    canvas.drawLine(p1, p2, stripePaint);
+  }
+
+  canvas.drawCircle(hatTop, r * 0.10, Paint()..color = const Color(0xFFFF4D4D));
+}
+
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
