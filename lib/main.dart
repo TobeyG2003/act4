@@ -194,6 +194,17 @@ class BasicShapesPainter extends CustomPainter {
 class SmileyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
+    final backgroundGradient = RadialGradient(
+      center: Alignment.center,
+      radius: 0.8,
+      colors: [const Color.fromARGB(255, 213, 215, 59), const Color.fromARGB(255, 13, 13, 13)],
+    );
+
+    canvas.drawRect(
+Rect.fromLTWH(0, 0, size.width, size.height),
+Paint()..shader = backgroundGradient.createShader(Rect.fromLTWH(0, 0,
+size.width, size.height)),
+);
     final centerX = size.width / 2;
     final centerY = size.height / 2;
 
@@ -314,6 +325,17 @@ size.width, size.height)),
 class HeartOnlyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
+    final backgroundGradient = RadialGradient(
+      center: Alignment.center,
+      radius: 0.8,
+      colors: [const Color.fromARGB(255, 255, 26, 190), const Color.fromARGB(255, 255, 21, 21)],
+    );
+
+    canvas.drawRect(
+Rect.fromLTWH(0, 0, size.width, size.height),
+Paint()..shader = backgroundGradient.createShader(Rect.fromLTWH(0, 0,
+size.width, size.height)),
+);
     final cx = size.width / 2;
     final cy = size.height / 2;
 
@@ -363,6 +385,17 @@ class HeartOnlyPainter extends CustomPainter {
 class PartyHatEmojiPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
+    final backgroundGradient = RadialGradient(
+      center: Alignment.center,
+      radius: 0.8,
+      colors: [const Color.fromARGB(255, 64, 26, 255), const Color.fromARGB(255, 255, 255, 255)],
+    );
+
+    canvas.drawRect(
+Rect.fromLTWH(0, 0, size.width, size.height),
+Paint()..shader = backgroundGradient.createShader(Rect.fromLTWH(0, 0,
+size.width, size.height)),
+);
     for (int i = 0; i < 200; i++) {
       final confettiPaint = Paint()
       ..color = Colors.primaries[Random().nextInt(Colors.primaries.length)]
