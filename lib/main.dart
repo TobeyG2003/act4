@@ -52,7 +52,7 @@ child:Column(
             ),
             const SizedBox(height: 20),
             const Text(
-              'Task 2: Emojis',
+              'Task 2: Smile Emoji',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
@@ -363,6 +363,20 @@ class HeartOnlyPainter extends CustomPainter {
 class PartyHatEmojiPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
+    for (int i = 0; i < 200; i++) {
+      final confettiPaint = Paint()
+      ..color = Colors.primaries[Random().nextInt(Colors.primaries.length)]
+      ..style = PaintingStyle.fill;
+      final rect = Rect.fromLTWH(
+        Random().nextDouble() * size.width,
+        Random().nextDouble() * size.height,
+        5,
+        10,
+      );
+       canvas.rotate(Random().nextDouble() * 2 * pi);
+      canvas.drawRect(rect, confettiPaint);
+    }
+    canvas.restore();
     final c = Offset(size.width * 0.5, size.height * 0.58);
     final r = min(size.width, size.height) * 0.28;
 
